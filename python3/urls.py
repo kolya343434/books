@@ -15,8 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+from django.http import HttpResponse
+
+# Функция для обработки корневого пути
+def index(request):
+    return HttpResponse("Welcome to the API. Use /books/ to see the list of books.")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),  # Админка
+    path('', index, name='index'),  # Корневой маршрут
+    path('', include('myapp.urls')),  # Подключение маршрутов приложения myapp
 ]
