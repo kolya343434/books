@@ -14,16 +14,36 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# from django.contrib import admin
+# from django.urls import include, path
+# from django.http import HttpResponse
+#
+# # Функция для обработки корневого пути
+# def index(request):
+#     return HttpResponse("Welcome to the API. Use /books/ to see the list of books.")
+#
+# urlpatterns = [
+#     path('admin/', admin.site.urls),  # Админка
+#     path('', index, name='index'),  # Корневой маршрут
+#     path('', include('myapp.urls')),  # Подключение маршрутов приложения myapp
+# ]
+
 from django.contrib import admin
 from django.urls import include, path
 from django.http import HttpResponse
 
 # Функция для обработки корневого пути
 def index(request):
-    return HttpResponse("Welcome to the API. Use /books/ to see the list of books.")
+    return HttpResponse("Welcome to the API!!!. Use /api/books/ to see the list of books.")
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # Админка
     path('', index, name='index'),  # Корневой маршрут
-    path('', include('myapp.urls')),  # Подключение маршрутов приложения myapp
+    path('api/', include('myapp.urls')),  # Подключение маршрутов приложения myapp под /api/
+]
+from myapp import views
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('documents/', include('myapp.urls')),
+    path('', views.home, name='home'),  # Добавляем обработчик для пустого пути
 ]

@@ -10,8 +10,54 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 from pathlib import Path
 
+
+import os
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Параметры доступа к Yandex Object Storage
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')  # Правильное имя переменной окружения
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')  # Правильное имя переменной окружения
+AWS_STORAGE_BUCKET_NAME = 'bookss'  # Замените на имя вашего бакета
+AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'  # Конечная точка для Yandex Object Storage
+AWS_S3_REGION_NAME = 'ru-central1'  # Ваш регион
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_S3_ADDRESSING_STYLE = 'path'
+
+STATICFILES_STORAGE = 'your_project.storage_backends.StaticStorage'
+STATIC_URL = f'https://{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
+
+# Бэкенд для хранения медиа-файлов
+DEFAULT_FILE_STORAGE = 'your_project.storage_backends.MediaStorage'
+MEDIA_URL = 'https://storage.yandexcloud.net/bookss/folder/'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,11 +67,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-lv00xqf*a7auc3uq0igyev*xf%mu&o^ca5s1#02^^e#wkx&2c$'
+ACCESS_KEY = 'YCAJEBroZohgmETsUhiJ5zTFs'
+SECRET_KEY = 'YCOxfenUj9v-OQRby-7cQzlR8UICOWqsa65Gl5-N'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Дополнительные параметры (опционально)
+AWS_DEFAULT_ACL = 'public-read'  # Или другой, в зависимости от требований
+AWS_QUERYSTRING_AUTH = False
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
@@ -40,6 +90,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'storages',
     'myapp',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -136,3 +187,19 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Настройки статических файлов
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Настройки для хранения статических файлов в Yandex Object Storage
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
