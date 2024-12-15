@@ -30,41 +30,67 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 
 
-
-
-
-
-
-from pathlib import Path
-
-
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Определение базового каталога проекта
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Параметры доступа к Yandex Object Storage
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')  # Правильное имя переменной окружения
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')  # Правильное имя переменной окружения
-AWS_STORAGE_BUCKET_NAME = 'bookss'  # Замените на имя вашего бакета
-AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'  # Конечная точка для Yandex Object Storage
-AWS_S3_REGION_NAME = 'ru-central1'  # Ваш регион
+# Загрузка переменных окружения из .env файла
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')  # Замените 'default_secret_key' на ваш секретный ключ
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+
+# Разрешённые хосты
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+# Приложения
+INSTALLED_APPS = [
+    # ... другие приложения ...
+    'storages',  # Добавляем django-storages
+    'myapp',      # Замените на название вашего приложения
+]
+
+# Настройки для Yandex Object Storage (S3-совместимое)
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'bookss'  # Ваш бакет
+AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
+AWS_S3_REGION_NAME = 'ru-central1'
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_ADDRESSING_STYLE = 'path'
+AWS_DEFAULT_ACL = 'public-read'
 
-STATICFILES_STORAGE = 'your_project.storage_backends.StaticStorage'
+# Настройки статики и медиа-файлов
+STATICFILES_STORAGE = 'myapp.storage_backends.StaticStorage'
+DEFAULT_FILE_STORAGE = 'myapp.storage_backends.MediaStorage'
+
 STATIC_URL = f'https://{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
-
-# Бэкенд для хранения медиа-файлов
-DEFAULT_FILE_STORAGE = 'your_project.storage_backends.MediaStorage'
-MEDIA_URL = 'https://storage.yandexcloud.net/bookss/folder/'
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_URL = f'https://{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/media/'
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+
+
+
+import os  # Убедитесь, что модуль os импортирован
+
+# Добавьте эти строки в конце файла settings.py или в соответствующем разделе
+
+MEDIA_URL = '/media/'  # URL для доступа к медиафайлам
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+
+
+
+
+# Остальные настройки Django...
 
 # SECURITY WARNING: keep the secret key used in production secret!
 ACCESS_KEY = 'YCAJEBroZohgmETsUhiJ5zTFs'
@@ -73,6 +99,9 @@ SECRET_KEY = 'YCOxfenUj9v-OQRby-7cQzlR8UICOWqsa65Gl5-N'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AWS_ACCESS_KEY_ID = 'YCAJEBroZohgmETsUhiJ5zTFs'
+AWS_SECRET_ACCESS_KEY = 'YCOxfenUj9v-OQRby-7cQzlR8UICOWqsa65Gl5-N'
+AWS_S3_REGION_NAME = 'ru-central1'
 # Дополнительные параметры (опционально)
 AWS_DEFAULT_ACL = 'public-read'  # Или другой, в зависимости от требований
 AWS_QUERYSTRING_AUTH = False
@@ -84,12 +113,31 @@ REST_FRAMEWORK = {
 }
 
 
-ALLOWED_HOSTS = []
+
+
+
+
+
+
+
+
+
+
+
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    # Добавьте ваш домен или IP-адрес сервера
+    'your-domain.com',
+    'www.your-domain.com',
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+'django_extensions',
     'storages',
     'myapp',
     'django.contrib.admin',

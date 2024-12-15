@@ -1,0 +1,21 @@
+<!-- myapp/templates/list_documents.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список документов</title>
+</head>
+<body>
+    <h1>Документы</h1>
+    <ul>
+        {% for document in documents %}
+            <li>
+                {{ document.title }} -
+                <a href="{% url 'myapp:download_document' document.id %}">Скачать</a>
+            </li>
+        {% empty %}
+            <li>Документы не найдены.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'myapp:upload_document' %}">Загрузить новый документ</a>
+</body>
+</html>

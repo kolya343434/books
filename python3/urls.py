@@ -36,14 +36,16 @@ from django.http import HttpResponse
 def index(request):
     return HttpResponse("Welcome to the API!!!. Use /api/books/ to see the list of books.")
 
-urlpatterns = [
-    path('admin/', admin.site.urls),  # Админка
-    path('', index, name='index'),  # Корневой маршрут
-    path('api/', include('myapp.urls')),  # Подключение маршрутов приложения myapp под /api/
-]
+#urlpatterns = [
+   # path('admin/', admin.site.urls),  # Админка
+    #path('', index, name='index'),  # Корневой маршрут
+   # path('api/', include('myapp.urls')),  # Подключение маршрутов приложения myapp под /api/
+#]
 from myapp import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('documents/', include('myapp.urls')),
+    path('', include('myapp.urls')),
+    path('books/', include('myapp.urls', namespace='myapp')),  # Подключение маршрутов с пространством имён
     path('', views.home, name='home'),  # Добавляем обработчик для пустого пути
 ]

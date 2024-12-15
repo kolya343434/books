@@ -32,6 +32,7 @@ class Book(models.Model):
         related_name="books"
     )  # Связь с таблицей AreaOfExpertise
     authors = models.ManyToManyField(Author, related_name="books")  # Many-to-Many связь с Author
+    file = models.FileField(upload_to='books/', blank=True, null=True)  # Поле для загрузки файлов
 
     def __str__(self):
         return self.name
@@ -44,3 +45,5 @@ class Document(models.Model):
 
     def __str__(self):
         return self.title
+
+

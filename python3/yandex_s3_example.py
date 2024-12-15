@@ -70,7 +70,7 @@ def list_objects(prefix=''):
 
 if __name__ == "__main__":
     # Загрузка файла
-    upload_file('/mnt/d/обама/python3/python3/python3/file.txt', 'folder/in/bucket/filee.txt')
+    upload_file('/mnt/d/обама/python3/python3/python3/filee.txt', 'folder/in/bucket/fileee.txt')
 
     # Скачивание файла
     download_file('folder/in/bucket/file.txt', '/mnt/d/обама/python3/python3/python3/downloaded_filee.txt')
