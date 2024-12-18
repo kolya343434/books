@@ -208,6 +208,12 @@ def download_book(request, book_id):
 
 
 
+
+def home(request):
+    books = Book.objects.all()  # Получаем все книги из базы данных
+    return render(request, 'myapp/home.html', {'books': books})
+
+
 def upload_success(request):
     return HttpResponse("Файл успешно загружен!")
 
@@ -243,3 +249,59 @@ def book_delete(request, pk):
 
 def upload_success(request):
     return HttpResponse("Файл успешно загружен!")
+
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.views.generic import DetailView
+from .models import Book
+
+
+def categories_list(request):
+    # Реализуйте логику для отображения категорий
+    return HttpResponse("Список категорий")
+
+def login_view(request):
+    # Реализуйте логику для входа
+    return HttpResponse("Вход")
+
+def signup_view(request):
+    # Реализуйте логику для регистрации
+    return HttpResponse("Регистрация")
+
+
+
+def detail(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    return render(request, 'detail.html', {'book': book})
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import Book
+
+
+def book_detail(request, book_id):
+    """
+    Представление для отображения деталей выбранной книги.
+    """
+    book = get_object_or_404(Book, id=book_id)
+
+    # Вы можете добавить дополнительную логику здесь, если необходимо
+
+    return render(request, 'myapp/detail.html', {'book': book})
+
+def filter_books(request):
+    # Предположим, что у книги есть поле 'category'
+    category = request.GET.get('category')
+    if category:
+        books = Book.objects.filter(category=category)
+    else:
+        books = Book.objects.all()
+    categories = Book.objects.values_list('category', flat=True).distinct()
+    return render(request, 'filter.html', {'books': books, 'categories': categories})
+
+
+from django.shortcuts import render
+def filter(request):
+    # Ваша логика фильтрации
+    return render(request, 'filter.html')

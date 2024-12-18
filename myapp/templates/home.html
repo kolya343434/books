@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="/myapp/templates/styles.css">
+</head>
+<body>
+    <!-- Панель навигации -->
+    <header>
+        <nav class="navbar">
+            <div class="nav-left">
+                <ul>
+                    <li><a href="../templates/home.html">Главная</a></li>
+                    <li><a href="../Category/filter.html">Категории</a></li>
+                </ul>
+            </div>
+            <div class="nav-right">
+                <a href="../Authorization/auth.html" class="btn">Войти</a>
+                <a href="../Authorization/auth.html#signup" class="btn">Зарегистрироваться</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main>
+        <section id="books-section">
+            <h1>Добро пожаловать в онлайн-библиотеку</h1>
+            <div class="book-list">
+                <!-- Book 1 -->
+                <div class="book-card">
+                    <div class="book-image">
+                        <a href="/myapp/templates/detail.html">
+                            <img src="Covers/1.jpg" alt="Книга 1">
+                        </a>
+                    </div>
+                    <p><a href="Book detail/detail.html?book=1">Книга 1</a></p>
+                </div>
+
+                <!-- Book 2 -->
+                <div class="book-card">
+                    <div class="book-image">
+                        <a href="Book detail/detail.html?book=2">
+                            <img src="Covers/2.jpg" alt="Книга 2">
+                        </a>
+                    </div>
+                    <p><a href="Book detail/detail.html?book=2">Книга 2</a></p>
+                </div>
+
+                <!-- Book 3 -->
+                <div class="book-card">
+                    <div class="book-image">
+                        <a href="Book detail/detail.html?book=3">
+                            <img src="Covers/3.jpg" alt="Книга 3">
+                        </a>
+                    </div>
+                    <p><a href="Book detail/detail.html?book=3">Книга 3</a></p>
+                </div>
+
+                <!-- Book 4 -->
+                <div class="book-card">
+                    <div class="book-image">
+                        <a href="Book detail/detail.html?book=4">
+                            <img src="Covers/4.jpg" alt="Книга 4">
+                        </a>
+                    </div>
+                    <p><a href="Book detail/detail.html?book=4">Книга 4</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <p>Создано Entidi | © 2024</p>
+    </footer>
+</body>
+</html>

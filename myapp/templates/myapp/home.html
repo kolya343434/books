@@ -1,0 +1,37 @@
+<!-- templates/myapp/home.html -->
+{% extends 'myapp/base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<section id="books-section" class="mt-4">
+    <h1 class="my-4 text-center">Добро пожаловать в онлайн-библиотеку</h1>
+    <div class="row">
+        {% if books %}
+            {% for book in books %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <a href="{% url 'myapp:book_detail' book.id %}" style="text-decoration: none;" class="h-100" >
+                            <img src="{{ book.cover.url }}" class="card-img-top" >
+                            <div class="card-body">
+                                <h5 class="card-title text-center text-secondary-emphasis">{{ book.name }}</h5>
+                            </div>
+                        </a>
+                        {% if book.file %}
+                            <div class="card-footer text-center">
+                                <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-primary btn-sm">Скачать файл</a>
+                            </div>
+                        {% else %}
+                            <div class="card-footer text-center">
+                                <p>Файл не загружен.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center">В базе данных нет книг.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

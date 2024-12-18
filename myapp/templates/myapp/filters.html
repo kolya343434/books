@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильтрация Книг</title>
+    <link rel="stylesheet" href="{% static 'myapp/styles.css' %}">
+</head>
+<body>
+    <!-- Панель навигации -->
+    <header>
+        <nav class="navbar">
+            <div class="nav-left">
+                <ul>
+                    <li><a href="{% url 'myapp:home' %}">Главная</a></li>
+                    <li><a href="{% url 'myapp:filter' %}">Категории</a></li>
+                </ul>
+            </div>
+            <div class="nav-right">
+                <a href="{% url 'myapp:auth' %}" class="btn">Войти</a>
+                <a href="{% url 'myapp:auth' %}#signup" class="btn">Зарегистрироваться</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main>
+        <section id="filter-section">
+            <h1>Фильтрация Книг</h1>
+            <form method="get" action="{% url 'myapp:filter' %}">
+                <label for="category">Выберите категорию:</label>
+                <select name="category" id="category">
+                    <option value="">Все категории</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat }}" {% if request.GET.category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Фильтровать</button>
+            </form>
+
+            <div class="book-list">
+                {% for book in books %}
+                <div class="book-card">
+                    <div class="book-image">
+                        <a href="{% url 'myapp:detail' book_id=book.id %}">
+                            <img src="{{ book.cover_image.url }}" alt="{{ book.title }}">
+                        </a>
+                    </div>
+                    <p><a href="{% url 'myapp:detail' book_id=book.id %}">{{ book.title }}</a></p>
+                </div>
+                {% empty %}
+                <p>Книги не найдены.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <p>Создано Entidi | © 2024</p>
+    </footer>
+</body>
+</html>

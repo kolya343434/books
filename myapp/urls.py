@@ -49,11 +49,20 @@ from . import views
 app_name = 'myapp'
 
 urlpatterns = [
+   # path('detail/<int:book_id>/',views.detail,name='detail'),
+    #path('filter/', views.filter, name='filter'),
+    #path('auth/', views.auth, name='auth'),
+   # path('detail/<int:book_id>/', views.detail, name='detail'),
+
+
+
     # Books - Class-Based Views
    # path('books/', BookListView.as_view(), name='book-list'),
-    path('', views.book_list, name='book_list'),
+    #path('', views.book_list, name='book_list'),
+    path('', views.home, name='home'),
     path('books/', views.book_list, name='book_list'),
-
+    path('books/<int:book_id>/', views.book_detail, name='book_detail'),
+    path('categories/', views.categories_list, name='categories'),
     path('books/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
     #path('books/create/', BookCreateView.as_view(), name='book-create'),
    # path('books/<int:pk>/update/', BookUpdateView.as_view(), name='book-update'),

@@ -1,0 +1,52 @@
+<!-- templates/myapp/detail.html -->
+{% extends 'myapp/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ book.name }}{% endblock %}
+
+{% block content %}
+<section id="book-detail" class="mt-4">
+    <div class="row">
+        <!-- Изображение книги -->
+        <div class="col-md-4">
+            {% if book.cover %}
+                <img src="{{ book.cover.url }}" alt="{{ book.name }}" class="img-fluid">
+            {% else %}
+                <p>Обложка не загружена.</p>
+            {% endif %}
+        </div>
+
+        <!-- Информация о книге -->
+        <div class="col-md-8">
+            <h1>{{ book.name }}</h1>
+            <p><strong>Количество страниц:</strong> {{ book.number_of_pages }}</p>
+            <p><strong>Год публикации:</strong> {{ book.year_of_publication }}</p>
+            <p><strong>Область специализации:</strong>
+                {% if book.area_of_expertise %}
+                    {{ book.area_of_expertise.area }}
+                {% else %}
+                    Не указана
+                {% endif %}
+            </p>
+            <p><strong>Авторы:</strong></p>
+            {% if book.authors.exists %}
+                <ul>
+                    {% for author in book.authors.all %}
+                        <li>{{ author }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Авторы не указаны.</p>
+            {% endif %}
+
+            <!-- Ссылка на скачивание файла книги -->
+            {% if book.file %}
+                <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-primary">Скачать файл</a>
+            {% else %}
+                <p>Файл не загружен.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
