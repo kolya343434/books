@@ -1,64 +1,43 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Фильтрация Книг</title>
-    <link rel="stylesheet" href="{% static 'myapp/styles.css' %}">
-</head>
-<body>
-    <!-- Панель навигации -->
-    <header>
-        <nav class="navbar">
-            <div class="nav-left">
-                <ul>
-                    <li><a href="{% url 'myapp:home' %}">Главная</a></li>
-                    <li><a href="{% url 'myapp:filter' %}">Категории</a></li>
-                </ul>
-            </div>
-            <div class="nav-right">
-                <a href="{% url 'myapp:auth' %}" class="btn">Войти</a>
-                <a href="{% url 'myapp:auth' %}#signup" class="btn">Зарегистрироваться</a>
-            </div>
-        </nav>
-    </header>
+<!-- myapp/templates/myapp/filters.html -->
 
-    <!-- Основное содержимое -->
-    <main>
-        <section id="filter-section">
-            <h1>Фильтрация Книг</h1>
-            <form method="get" action="{% url 'myapp:filter' %}">
-                <label for="category">Выберите категорию:</label>
-                <select name="category" id="category">
-                    <option value="">Все категории</option>
-                    {% for cat in categories %}
-                    <option value="{{ cat }}" {% if request.GET.category == cat %}selected{% endif %}>{{ cat }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit">Фильтровать</button>
-            </form>
+{% extends 'myapp/base.html' %}
 
-            <div class="book-list">
-                {% for book in books %}
-                <div class="book-card">
-                    <div class="book-image">
-                        <a href="{% url 'myapp:detail' book_id=book.id %}">
-                            <img src="{{ book.cover_image.url }}" alt="{{ book.title }}">
-                        </a>
-                    </div>
-                    <p><a href="{% url 'myapp:detail' book_id=book.id %}">{{ book.title }}</a></p>
+{% block title %}Фильтрация Книг{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="my-4 text-center">Фильтрация Книг</h1>
+
+    <!-- Кнопка "Вернуться на главную" -->
+    <div class="mb-3 text-end">
+        <a href="{% url 'myapp:home' %}" class="btn btn-secondary">Вернуться на главную</a>
+    </div>
+
+    <!-- Отображение книг -->
+    <div class="row">
+        {% for book in books %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'myapp:book_detail' book.id %}" style="text-decoration: none;" class="h-100">
+                        <img src="{{ book.cover_image.url }}" class="card-img-top" alt="{{ book.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-center text-secondary-emphasis">{{ book.name }}</h5>
+                        </div>
+                    </a>
+                    {% if book.file %}
+                        <div class="card-footer text-center">
+                            <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-primary btn-sm">Скачать файл</a>
+                        </div>
+                    {% else %}
+                        <div class="card-footer text-center">
+                            <p>Файл не загружен.</p>
+                        </div>
+                    {% endif %}
                 </div>
-                {% empty %}
-                <p>Книги не найдены.</p>
-                {% endfor %}
             </div>
-        </section>
-    </main>
-
-    <!-- Подвал -->
-    <footer>
-        <p>Создано Entidi | © 2024</p>
-    </footer>
-</body>
-</html>
+        {% empty %}
+            <p class="text-center">Книги не найдены.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

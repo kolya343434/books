@@ -1,51 +1,3 @@
-# from django.shortcuts import render
-#
-# from rest_framework import generics
-# from .models import Book, Author, AreaOfExpertise
-# from .serializers import (
-#     BookSerializer, BookCreateUpdateSerializer,
-#     AuthorSerializer, AreaOfExpertiseSerializer
-# )
-#
-# # Books
-# class BookListView(generics.ListAPIView):
-#     queryset = Book.objects.all()
-#     serializer_class = BookSerializer
-#
-# class BookDetailView(generics.RetrieveAPIView):
-#     queryset = Book.objects.all()
-#     serializer_class = BookSerializer
-#
-# class BookCreateView(generics.CreateAPIView):
-#     queryset = Book.objects.all()
-#     serializer_class = BookCreateUpdateSerializer
-#
-# class BookUpdateView(generics.UpdateAPIView):
-#     queryset = Book.objects.all()
-#     serializer_class = BookCreateUpdateSerializer
-#
-# class BookDeleteView(generics.DestroyAPIView):
-#     queryset = Book.objects.all()
-#
-# # Authors
-# class AuthorListView(generics.ListAPIView):
-#     queryset = Author.objects.all()
-#     serializer_class = AuthorSerializer
-#
-# class AuthorCreateUpdateDeleteView(generics.ListCreateAPIView):
-#     queryset = Author.objects.all()
-#     serializer_class = AuthorSerializer
-#
-# # Areas of Expertise
-# class AreaOfExpertiseListView(generics.ListAPIView):
-#     queryset = AreaOfExpertise.objects.all()
-#     serializer_class = AreaOfExpertiseSerializer
-#
-# class AreaOfExpertiseCreateUpdateDeleteView(generics.ListCreateAPIView):
-#     queryset = AreaOfExpertise.objects.all()
-#     serializer_class = AreaOfExpertiseSerializer
-
-from django.shortcuts import render
 
 from rest_framework import generics
 from .models import Book, Author, AreaOfExpertise
@@ -112,11 +64,6 @@ def list_documents(request):
     documents = Document.objects.all()
     return render(request, 'list_documents.html', {'documents': documents})
 
-
-
-
-def home(request):
-    return render(request, 'home.html')
 
 
 
@@ -210,9 +157,14 @@ def download_book(request, book_id):
 
 
 def home(request):
-    books = Book.objects.all()  # Получаем все книги из базы данных
-    return render(request, 'myapp/home.html', {'books': books})
+    categories = AreaOfExpertise.objects.all()  # Получаем все категории
+    books = Book.objects.all()  # Опционально: получить книги для главной страницы
+    context = {
 
+        'books': books , # Если хотите отображать книги на главной
+        'categories': categories
+    }
+    return render(request, 'myapp/home.html', context)
 
 def upload_success(request):
     return HttpResponse("Файл успешно загружен!")
@@ -258,8 +210,11 @@ from .models import Book
 
 
 def categories_list(request):
-    # Реализуйте логику для отображения категорий
-    return HttpResponse("Список категорий")
+    categories = AreaOfExpertise.objects.all()
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'myapp/book_list.html', context)
 
 def login_view(request):
     # Реализуйте логику для входа
@@ -290,18 +245,25 @@ def book_detail(request, book_id):
 
     return render(request, 'myapp/detail.html', {'book': book})
 
+# myapp/views.py
+from django.shortcuts import render, get_object_or_404
+from .models import Book, AreaOfExpertise
+
 def filter_books(request):
-    # Предположим, что у книги есть поле 'category'
-    category = request.GET.get('category')
-    if category:
-        books = Book.objects.filter(category=category)
+    category_id = request.GET.get('category')  # Получаем выбранную категорию по ID
+    categories = AreaOfExpertise.objects.all()  # Получаем все категории
+
+    if category_id:
+        books = Book.objects.filter(area_of_expertise__id=category_id)
     else:
         books = Book.objects.all()
-    categories = Book.objects.values_list('category', flat=True).distinct()
-    return render(request, 'filter.html', {'books': books, 'categories': categories})
+
+    context = {
+        'books': books,
+        'categories': categories
+    }
+
+    return render(request, 'myapp/book_list.html', context)
 
 
 from django.shortcuts import render
-def filter(request):
-    # Ваша логика фильтрации
-    return render(request, 'filter.html')

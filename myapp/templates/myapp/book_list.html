@@ -1,36 +1,66 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Список книг</title>
-</head>
-<body>
-    <h1>Список книг</h1>
-    {% if books %}
-        <ul>
-            {% for book in books %}
-                <li>
-                    <strong>{{ book.name }}</strong><br>
-                    Количество страниц: {{ book.number_of_pages }}<br>
-                    Год публикации: {{ book.year_of_publication }}<br>
-                    Область специализации: {{ book.area_of_expertise.area }}<br>
-                    Авторы:
-                    <ul>
-                        {% for author in book.authors.all %}
-                            <li>{{ author }}</li>
-                        {% endfor %}
-                    </ul>
+<!-- myapp/templates/myapp/filters.html -->
+
+{% extends 'myapp/base.html' %}
+
+{% block title %}Фильтрация Книг{% endblock %}
+
+{% block content %}
+<section id="filter-section" class="mt-4">
+    <h1 class="my-4 text-center">Фильтрация Книг</h1>
+
+    <!-- Кнопка "Вернуться на главную" (раскомментируйте и настройте при необходимости) -->
+    <!-- <a href="{% url 'myapp:home' %}" class="btn btn-secondary mb-4">Вернуться на главную</a> -->
+
+    <!-- Форма фильтрации -->
+    <form method="get" action="{% url 'myapp:filter' %}" class="mb-4">
+        <div class="form-group">
+            <select name="category" id="category" class="form-control">
+                <option value="">Все категории</option>
+                {% for cat in categories %}
+                    <option
+                        value="{{ cat.id }}"
+                        {% if request.GET.category|default_if_none:'' == cat.id|stringformat:"s" %}selected{% endif %}
+                    >
+                        {{ cat.area }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Фильтровать</button>
+    </form>
+
+    <!-- Отображение книг -->
+    <div class="row">
+        {% for book in books %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'myapp:book_detail' book.id %}" style="text-decoration: none;" class="h-100">
+                        <img src="{{ book.cover.url }}" class="card-img-top" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title text-center text-secondary-emphasis">{{ book.name }}</h5>
+                            <p class="text-center text-muted">
+                                {% if book.area_of_expertise %}
+                                    {{ book.area_of_expertise.area }}
+                                {% else %}
+                                    Не указана
+                                {% endif %}
+                            </p>
+                        </div>
+                    </a>
                     {% if book.file %}
-                        <!-- Использование пространства имён -->
-                        <a href="{% url 'myapp:download_book' book.id %}">Скачать файл</a>
+                        <div class="card-footer text-center">
+                            <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-primary btn-sm">Скачать файл</a>
+                        </div>
                     {% else %}
-                        <p>Файл не загружен</p>
+                        <div class="card-footer text-center">
+                            <p>Файл не загружен.</p>
+                        </div>
                     {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>В базе данных нет книг.</p>
-    {% endif %}
-</body>
-</html>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center">Книги не найдены.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
