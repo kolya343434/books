@@ -1,6 +1,6 @@
 <!-- templates/myapp/home.html -->
 {% extends 'myapp/base.html' %}
-
+{% load static %}
 {% block title %}Главная страница{% endblock %}
 
 {% block content %}
@@ -10,16 +10,16 @@
         {% if books %}
             {% for book in books %}
                 <div class="col-md-3 mb-4">
-                    <div class="card h-100">
-                        <a href="{% url 'myapp:book_detail' book.id %}" style="text-decoration: none;" class="h-100" >
-                            <img src="{{ book.cover.url }}" class="card-img-top" >
+                    <div class="card h-100 border border-dark">
+                        <a href="{% url 'myapp:book_detail' book.id %}" style="text-decoration: none;" class="h-100 bg-light" >
+                            <img src="{% static 'myapp/Covers/Gray_book.png' %}" class="card-img-top" >
                             <div class="card-body">
                                 <h5 class="card-title text-center text-secondary-emphasis">{{ book.name }}</h5>
                             </div>
                         </a>
                         {% if book.file %}
                             <div class="card-footer text-center">
-                                <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-primary btn-sm">Скачать файл</a>
+                                <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-dark btn-sm">Скачать файл</a>
                             </div>
                         {% else %}
                             <div class="card-footer text-center">

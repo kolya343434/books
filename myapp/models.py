@@ -19,11 +19,11 @@ class Author(models.Model):
         return f"{self.surname} {self.name} {self.patronymic or ''}".strip()
 
 
-# Модель для таблицы books
+
 class Book(models.Model):
-    name = models.CharField(max_length=100)  # Название книги
-    number_of_pages = models.IntegerField(blank=True, null=True)  # Количество страниц
-    year_of_publication = models.IntegerField(blank=True, null=True)  # Год публикации
+    name = models.CharField(max_length=100)
+    number_of_pages = models.IntegerField(blank=True, null=True)
+    year_of_publication = models.IntegerField(blank=True, null=True)
     area_of_expertise = models.ForeignKey(
         AreaOfExpertise,
         on_delete=models.SET_NULL,
@@ -31,8 +31,8 @@ class Book(models.Model):
         null=True,
         related_name="books"
     )  # Связь с таблицей AreaOfExpertise
-    authors = models.ManyToManyField(Author, related_name="books")  # Many-to-Many связь с Author
-    file = models.FileField(upload_to='books/', blank=True, null=True)  # Поле для загрузки файлов
+    authors = models.ManyToManyField(Author, related_name="books")
+    file = models.FileField(upload_to='books/', blank=True, null=True)
 
     def __str__(self):
         return self.name

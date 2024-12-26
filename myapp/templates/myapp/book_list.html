@@ -1,7 +1,7 @@
 <!-- myapp/templates/myapp/filters.html -->
 
 {% extends 'myapp/base.html' %}
-
+{% load static %}
 {% block title %}Фильтрация Книг{% endblock %}
 
 {% block content %}
@@ -26,16 +26,16 @@
                 {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Фильтровать</button>
+        <button type="submit" class="btn btn-dark mt-2">Фильтровать</button>
     </form>
 
     <!-- Отображение книг -->
     <div class="row">
         {% for book in books %}
             <div class="col-md-3 mb-4">
-                <div class="card h-100">
-                    <a href="{% url 'myapp:book_detail' book.id %}" style="text-decoration: none;" class="h-100">
-                        <img src="{{ book.cover.url }}" class="card-img-top" alt="">
+                <div class="card h-100 border border-dark">
+                    <a href="{% url 'myapp:book_detail' book.id %}" style="text-decoration: none;" class="h-100 bg-light">
+                        <img src="{% static 'myapp/Covers/Gray_book.png' %}" class="card-img-top" alt="">
                         <div class="card-body">
                             <h5 class="card-title text-center text-secondary-emphasis">{{ book.name }}</h5>
                             <p class="text-center text-muted">
@@ -49,7 +49,7 @@
                     </a>
                     {% if book.file %}
                         <div class="card-footer text-center">
-                            <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-primary btn-sm">Скачать файл</a>
+                            <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-dark btn-sm">Скачать файл</a>
                         </div>
                     {% else %}
                         <div class="card-footer text-center">

@@ -157,11 +157,11 @@ def download_book(request, book_id):
 
 
 def home(request):
-    categories = AreaOfExpertise.objects.all()  # Получаем все категории
-    books = Book.objects.all()  # Опционально: получить книги для главной страницы
+    categories = AreaOfExpertise.objects.all()
+    books = Book.objects.all()
     context = {
 
-        'books': books , # Если хотите отображать книги на главной
+        'books': books ,
         'categories': categories
     }
     return render(request, 'myapp/home.html', context)

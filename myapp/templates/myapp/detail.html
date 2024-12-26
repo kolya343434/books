@@ -10,15 +10,11 @@
     <div class="row">
         <!-- Изображение книги -->
         <div class="col-md-4">
-            {% if book.cover %}
-                <img src="{{ book.cover.url }}" alt="{{ book.name }}" class="img-fluid">
-            {% else %}
-                <p>Обложка не загружена.</p>
-            {% endif %}
+                <img src="{% static 'myapp/Covers/images.png' %}" class="img-fluid w-100">
         </div>
 
-        <!-- Информация о книге -->
-        <div class="col-md-8">
+        <!-- Информация о книге с выравниванием текста по центру -->
+        <div class="col-md-8 text-center">
             <h1>{{ book.name }}</h1>
             <p><strong>Количество страниц:</strong> {{ book.number_of_pages }}</p>
             <p><strong>Год публикации:</strong> {{ book.year_of_publication }}</p>
@@ -31,7 +27,7 @@
             </p>
             <p><strong>Авторы:</strong></p>
             {% if book.authors.exists %}
-                <ul>
+                <ul class="list-unstyled">
                     {% for author in book.authors.all %}
                         <li>{{ author }}</li>
                     {% endfor %}
@@ -42,7 +38,7 @@
 
             <!-- Ссылка на скачивание файла книги -->
             {% if book.file %}
-                <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-primary">Скачать файл</a>
+                <a href="{% url 'myapp:download_book' book.id %}" class="btn btn-dark">Скачать файл</a>
             {% else %}
                 <p>Файл не загружен.</p>
             {% endif %}
